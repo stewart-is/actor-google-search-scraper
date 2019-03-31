@@ -148,23 +148,26 @@ From there, you can export it to various formats using the [Get dataset items](h
 API endpoint. Note that the API endpoint accepts various parameters
 that let you control what kind of data you'll get.
 
-For example, if you are only interested in organic results,
-then you can use a combination of query parameters `fields=searchQuery,organicResults`
+### One organic result per row
+
+If you are only interested in organic results and want to have just one organic result per row in your results, you can use a combination of query parameters `fields=searchQuery,organicResults`
 and `unwind=organicResults` to obtain a plain array of organic results.
-The original URL of a dataset has the form:
+
+The basic URL of the dataset with results has the following form:
 
 ```
 https://api.apify.com/v2/datasets/[DATASET_ID]/items?format=[FORMAT]
 ```
 
 where the format is one of `csv`, `html`, `xlsx`, `xml`, `rss` and `json`.
-By adding the following query parameters
+
+By adding the aforementioned query parameters:
 
 ```
-https://api.apify.com/v2/datasets/[DATASET_ID]/items?format=[FORMAT]&fields=searchQuery,organicResults&unwind=organicResults
+https://api.apify.com/v2/datasets/[DATASET_ID]/items?format=json&fields=searchQuery,organicResults&unwind=organicResults
 ```
 
-you obtain the following result:
+you obtain the following results:
 
 ```json
 [
@@ -172,11 +175,7 @@ you obtain the following result:
     "searchQuery": {
       "term": "Restaurants in Prague",
       "page": 1,
-      "type": "SEARCH",
-      "countryCode": "us",
-      "languageCode": "en",
-      "locationUule": null,
-      "resultsPerPage": "10"
+      ...
     },
     "title": "THE 10 BEST Restaurants in Prague 2019 - TripAdvisor",
     "url": "https://www.tripadvisor.com/Restaurants-g274707-Prague_Bohemia.html",
@@ -188,11 +187,7 @@ you obtain the following result:
     "searchQuery": {
       "term": "Restaurants in Prague",
       "page": 1,
-      "type": "SEARCH",
-      "countryCode": "us",
-      "languageCode": "en",
-      "locationUule": null,
-      "resultsPerPage": "10"
+      ...
     },
     "title": "The 11 Best Restaurants in Prague | Elite Traveler",
     "url": "https://www.elitetraveler.com/finest-dining/restaurant-guide/the-11-best-restaurants-in-prague",
@@ -203,6 +198,10 @@ you obtain the following result:
   ...
 ]
 ```
+
+By using `format=csv` you'll get a table where each row contains just one organic result.
+For more details about exporting and formatting the results, please see the documentation of [Get dataset items](https://apify.com/docs/api/v2#/reference/datasets/item-collection/get-items) API endpoint.
+
 
 ## Tips and tricks
 
