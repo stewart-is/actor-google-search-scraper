@@ -684,7 +684,7 @@
         "locationUule": {
             "title": "UULE location code",
             "type": "string",
-            "description": "The code for geolocation of search results. It's passed to Google Search as the <code>uule</code> URL query parameter. <a href='https://padavvan.github.io/'>UULE code generator</a> <br><br> For more information, see <a href='https://moz.com/ugc/geolocation-the-ultimate-tip-to-emulate-local-search' target='_blank'>UULE code</a>.<br><br>This setting only applies to <strong>Search queries</strong>, but not to <strong>Search URLs</strong>.",
+            "description": "The code for geolocation of search results. It's passed to Google Search as the <code>uule</code> URL query parameter.<br><br><a href='https://padavvan.github.io/'>UULE code generator</a><br>For more information, see <a href='https://moz.com/ugc/geolocation-the-ultimate-tip-to-emulate-local-search' target='_blank'>this article</a>.<br><br>This setting only applies to <strong>Search queries</strong>, but not to <strong>Search URLs</strong>.",
             "editor": "textfield"
         },
         "resultsPerPage": {
