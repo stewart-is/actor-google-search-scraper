@@ -2,13 +2,15 @@ const Apify = require('apify');
 const url = require('url');
 const {
     REQUIRED_PROXY_GROUP, GOOGLE_DEFAULT_RESULTS_PER_PAGE, DEFAULT_GOOGLE_SEARCH_DOMAIN_COUNTRY_CODE,
-    GOOGLE_SEARCH_DOMAIN_TO_COUNTRY_CODE } = require('./consts');
+    GOOGLE_SEARCH_DOMAIN_TO_COUNTRY_CODE, GOOGLE_SEARCH_URL_REGEX } = require('./consts');
 const extractorsDesktop = require('./extractors_desktop');
 const extractorsMobile = require('./extractors_mobile');
 const {
     getInitialRequests, executeCustomDataFunction, getInfoStringFromResults, createSerpRequest,
     logAsciiArt, createDebugInfo, ensureAccessToSerpProxy,
 } = require('./tools');
+
+const { log } = Apify.utils;
 
 Apify.main(async () => {
     const input = await Apify.getInput();
@@ -24,6 +26,7 @@ Apify.main(async () => {
     if (!initialRequests.length) throw new Error('The input must contain at least one search query or URL.');
     const requestList = await Apify.openRequestList('initial-requests', initialRequests);
     const requestQueue = await Apify.openRequestQueue();
+    const dataset = await Apify.openDataset();
     const extractors = mobileResults ? extractorsMobile : extractorsDesktop;
 
     // Create crawler.
@@ -34,7 +37,7 @@ Apify.main(async () => {
         requestFunction: ({ request, autoscaledPool }) => {
             const parsedUrl = url.parse(request.url, true);
             request.userData.startedAt = new Date();
-            Apify.utils.log.info(`Querying "${parsedUrl.query.q}" page number ${request.userData.page} ...`);
+            log.info(`Querying "${parsedUrl.query.q}" page number ${request.userData.page} ...`);
             return crawler._defaultRequestFunction({ request, autoscaledPool }); // eslint-disable-line
         },
         useApifyProxy: true,
@@ -48,7 +51,7 @@ Apify.main(async () => {
             const parsedUrl = url.parse(request.url, true);
 
             // We know the URL matches (otherwise we have a bug here)
-            const matches = GOOGLE_SEARCH_URL_REGEX.match(request.url);
+            const matches = GOOGLE_SEARCH_URL_REGEX.exec(request.url);
             const domain = matches[3].toLowerCase();
 
             // Compose the dataset item.
@@ -87,14 +90,14 @@ Apify.main(async () => {
                 if (request.userData.page < maxPagesPerQuery - 1 && maxPagesPerQuery) {
                     await requestQueue.addRequest(createSerpRequest(`http://${parsedUrl.host}${nextPageUrl}`, request.userData.page + 1));
                 } else {
-                    Apify.utils.log.info(`Not enqueueing next page for query "${parsedUrl.query.q}" as "maxPagesPerQuery" have been reached.`);
+                    log.info(`Not enqueueing next page for query "${parsedUrl.query.q}" as "maxPagesPerQuery" have been reached.`);
                 }
             }
 
-            await Apify.pushData(data);
+            await dataset.pushData(data);
 
             // Log some nice info for user.
-            Apify.utils.log.info(`Finished query "${parsedUrl.query.q}" page number ${nonzeroPage} (${getInfoStringFromResults(data)})`);
+            log.info(`Finished query "${parsedUrl.query.q}" page number ${nonzeroPage} (${getInfoStringFromResults(data)})`);
         },
         handleFailedRequestFunction: async ({ request }) => {
             await Apify.pushData({
@@ -107,5 +110,16 @@ Apify.main(async () => {
     // Run the crawler.
     await crawler.run();
 
-    Apify.utils.log.info('Done - all queries have been finished.');
+    const { datasetId } = dataset;
+    if (!datasetId) {
+        log.info(`Google SERP scraping finished.
+
+Full results in JSON format:
+https://api.apify.com/v2/datasets/${datasetId}/items?format=json
+
+Simplified organic results in JSON format:
+https://api.apify.com/v2/datasets/${datasetId}/items?format=json&fields=searchQuery,organicResults&unwind=organicResults`);
+    } else {
+        log.info('Google SERP scraping finished.');
+    }
 });
