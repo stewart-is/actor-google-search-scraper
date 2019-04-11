@@ -10,9 +10,9 @@ Specifically, the actor extracts the following data from each Google Search resu
 - Related queries
 - Additional custom attributes
 
-Note that the actor doesn't support special types of searches,
+Note that the actor doesn't support special types of Google searches,
 such as [Google Shopping](https://www.google.com/shopping),
-[Images](https://www.google.com/images) or [News](https://www.google.com/news).
+[Google Images](https://www.google.com/imghp) or [Google News](news.google.com).
 
 ## Use cases
 
@@ -29,8 +29,7 @@ Typical use cases include:
 - Monitor your competition in both organic and paid results.
 - Build a URL list for certain keywords. This is useful if you, for example, need good relevant starting points when scraping web pages containing specific phrases.
 
-Read more in the [How to scrape Google Search
-](https://blog.apify.com/unofficial-google-search-api-from-apify-22a20537a951)
+Read more in the [How to scrape Google Search](https://blog.apify.com/unofficial-google-search-api-from-apify-22a20537a951)
 blog post.
 
 

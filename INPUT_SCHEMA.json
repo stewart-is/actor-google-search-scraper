@@ -9,7 +9,8 @@
             "type": "string",
             "description": "Google Search queries and/or Google Search URLs, one item per line.",
             "prefill": "Hotels in Prague\nRestaurants in Prague\nhttps://www.google.com/search?safe=off&source=hp&ei=YQhwXN3ZIoGCk74PrIiM8A4&q=accommodation&btnK=Hledat+Googlem&oq=accommodation",
-            "editor": "textarea"
+            "editor": "textarea",
+            "pattern": "[^\\s]+"
         },
         "countryCode": {
             "title": "Country",
