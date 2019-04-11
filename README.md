@@ -1,7 +1,7 @@
 # Google Search Scraper
 
 The actor crawls [Google Search](https://www.google.com/search) result pages (SERPs)
-and extracts data from HTML pages to a structured format such as JSON, XML or Excel.
+and extracts data from the HTML to a structured format such as JSON, XML or Excel.
 Specifically, the actor extracts the following data from each Google Search results page:
 
 - Organic results
@@ -11,25 +11,27 @@ Specifically, the actor extracts the following data from each Google Search resu
 - Additional custom attributes
 
 Note that the actor doesn't support special types of searches,
-such as Google Shopping, Images or News.
+such as [Google Shopping](https://www.google.com/shopping),
+[Images](https://www.google.com/images) or [News](https://www.google.com/news).
 
 ## Use cases
 
-For many people, Google Search is the entry point to the internet,
-so how they rank on Google is really important for businesses.
-Unfortunately, Google Search doesn't provide a public API, so the only way to monitor
+Google Search is the front door to the internet for most people around the world,
+therefore it's really important for businesses how they rank on Google.
+Unfortunately, Google Search does not provide a public API, so the only way to monitor
 search results and ranking is to use [web scraping](https://en.wikipedia.org/wiki/Web_scraping).
 
-Typical use cases are:
+Typical use cases include:
 
 - [Search engine optimization (SEO)](https://en.wikipedia.org/wiki/Search_engine_optimization)
-— Monitor how your website performs on Google for certain queries over a period of time.
-- Analyze ads for a given set of keywords.
+— Monitor how your website performs on Google for certain queries over time.
+- Analyze displayed ads for a given set of keywords.
 - Monitor your competition in both organic and paid results.
 - Build a URL list for certain keywords. This is useful if you, for example, need good relevant starting points when scraping web pages containing specific phrases.
 
-Read more in this blog post [How to scrape Google Search
-](https://blog.apify.com/unofficial-google-search-api-from-apify-22a20537a951).
+Read more in the [How to scrape Google Search
+](https://blog.apify.com/unofficial-google-search-api-from-apify-22a20537a951)
+blog post.
 
 
 ## Input settings
@@ -38,34 +40,48 @@ The actor gives you fine-grained control about what kind of Google Search result
 You can specify the following settings:
 
 - Query phrases or raw URLs
-- Country & language
+- Country
+- Language
 - Exact geolocation
 - Number of results per page
 - Mobile or desktop version
 
-For a complete description of all settings,
+For a complete description of all settings of the actor,
 see the [input specification](https://www.apify.com/apify/google-search-scraper?section=input-schema).
 
 
 ## Usage
 
-To use the actor, you'll need access to [Apify Proxy](https://apify.com/proxy)
+To use this actor, you'll need access to [Apify Proxy](https://apify.com/proxy)
 and have a sufficient limit for Google SERP queries
-(you can view this on your [Account](https://my.apify.com/account) page).
+(you can see the limit on your [Account](https://my.apify.com/account) page).
 New Apify users have a free trial of Apify Proxy and Google SERPs,
 which lets you try this actor free of charge.
 Once the Apify Proxy trial is expired,
-you'll need to subscribe to a [paid plan](https://apify.com/pricing) in order to keep using this actor.
+you'll need to subscribe to a [paid plan](https://apify.com/pricing) in order to keep using the actor.
 If you need to increase your Google SERP limit or have any questions,
-please contact [Apify support](https://apify.com/contact).
+please contact [support@apify.com](mailto:support@apify.com)
 
 
 ## Results
 
-The actor stores its result in a dataset, from which you can export it
+The actor stores its result in the default [dataset](https://apify.com/docs/storage#dataset) associated with the actor run,
+from which you can export it
 to various formats, such as JSON, XML, CSV or Excel.
-For each Google Search results page, the actor creates one record
-in the dataset, which looks as follows (in JSON):
+
+The results can be downloaded from the
+[Get dataset items](https://www.apify.com/docs/api/v2#/reference/datasets/item-collection/get-items)
+API endpoint:
+
+```
+https://api.apify.com/v2/datasets/[DATASET_ID]/items?format=[FORMAT]
+```
+
+where `[DATASET_ID]` is the ID of the dataset and `[FORMAT]`
+can be `csv`, `html`, `xlsx`, `xml`, `rss` or `json`.
+
+For each Google Search results page, the dataset will contain a single record,
+which in JSON format looks as follows:
 
 ```json
 {
@@ -73,6 +89,7 @@ in the dataset, which looks as follows (in JSON):
     "term": "Hotels in Prague",
     "page": 1,
     "type": "SEARCH",
+    "domain": "google.cz",
     "countryCode": "cz",
     "languageCode": "en",
     "locationUule": null,
@@ -143,31 +160,18 @@ in the dataset, which looks as follows (in JSON):
 },
 ```
 
-The results are stored in the default dataset associated with the actor run.
-From there, you can export it to various formats using the [Get dataset items](https://www.apify.com/docs/api/v2#/reference/datasets/item-collection/get-items)
-API endpoint. Note that the API endpoint accepts various parameters
-that let you control what kind of data you'll get.
+### One organic search result per row
 
-### One organic result per row
-
-If you are only interested in organic results and want to have just one organic result per row in your results, you can use a combination of query parameters `fields=searchQuery,organicResults`
-and `unwind=organicResults` to obtain a plain array of organic results.
-
-The basic URL of the dataset with results has the following form:
+If you are only interested in organic Google Search results and
+want to get just one organic result per row on the output,
+simply query the `fields=searchQuery,organicResults`
+and `unwind=organicResults` query parameters to the API endpoint URL:
 
 ```
-https://api.apify.com/v2/datasets/[DATASET_ID]/items?format=[FORMAT]
+https://api.apify.com/v2/datasets/[DATASET_ID]/items?format=[FORMAT]&fields=searchQuery,organicResults&unwind=organicResults
 ```
 
-where the format is one of `csv`, `html`, `xlsx`, `xml`, `rss` and `json`.
-
-By adding the aforementioned query parameters:
-
-```
-https://api.apify.com/v2/datasets/[DATASET_ID]/items?format=json&fields=searchQuery,organicResults&unwind=organicResults
-```
-
-you obtain the following results:
+The API will return a result like this (in JSON format):
 
 ```json
 [
@@ -199,13 +203,16 @@ you obtain the following results:
 ]
 ```
 
-By using `format=csv` you'll get a table where each row contains just one organic result.
-For more details about exporting and formatting the results, please see the documentation of [Get dataset items](https://apify.com/docs/api/v2#/reference/datasets/item-collection/get-items) API endpoint.
+When using tabular format such as `csv` or `xls`,
+you'll get a table where each row contains just one organic result.
+For more details about exporting and formatting the dataset records,
+please see the documentation of the [Get dataset items](https://apify.com/docs/api/v2#/reference/datasets/item-collection/get-items) API endpoint.
 
 
 ## Tips and tricks
 
-Crawling of the second and further result pages might be slower than the first page.
-If you need to scrape the first 100 results,
+Crawling the second and further result pages might be slower than the first page.
+If you need to scrape a lot of results for a single query,
 then you can greatly improve the speed of the crawl by setting
-`resultsPerPage=100` instead of crawling 10 pages each with 10 results.
+**Results per page** (`resultsPerPage`) to 100,
+instead of crawling 10 pages each with 10 results.
