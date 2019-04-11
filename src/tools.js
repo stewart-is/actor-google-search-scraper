@@ -1,7 +1,7 @@
 const Apify = require('apify');
 const vm = require('vm');
 const _ = require('underscore');
-const queryString = require('query-string');
+const queryString = require('query-string'); // TODO: Use Node default
 const { REQUIRED_PROXY_GROUP } = require('./consts');
 const {
     DEFAULT_GOOGLE_SEARCH_DOMAIN_COUNTRY_CODE,
@@ -33,15 +33,15 @@ exports.getInitialRequests = ({
         .map(item => item.trim())
         .filter(item => !!item)
         .map((queryOrUrl) => {
-            // If it's serach URL ...
+            // If it's search URL ...
             if (GOOGLE_SEARCH_URL_REGEX.test(queryOrUrl)) return exports.createSerpRequest(queryOrUrl, 0);
 
-            // It's query ...
+            // Otherwise consider it as query term ...
             const domain = COUNTRY_CODE_TO_GOOGLE_SEARCH_DOMAIN[countryCode]
                 || COUNTRY_CODE_TO_GOOGLE_SEARCH_DOMAIN[DEFAULT_GOOGLE_SEARCH_DOMAIN_COUNTRY_CODE];
             const qs = { q: queryOrUrl };
 
-            if (countryCode) qs.gl = countryCode;
+            // NOTE: Don't set the "gl" parameter, some Apify Proxy Google SERP providers cannot handle it!
             if (languageCode) qs.hl = languageCode;
             if (locationUule) qs.uule = locationUule;
             if (resultsPerPage) qs.num = resultsPerPage;
@@ -120,14 +120,12 @@ exports.ensureAccessToSerpProxy = async () => {
     const hasGroupAllowed = userInfo.proxy.groups.filter(group => group.name === REQUIRED_PROXY_GROUP).length > 0;
     const hasNonzeroLimit = userInfo.limits.monthlyGoogleSerpRequests > 0;
     if (!hasGroupAllowed || !hasNonzeroLimit) {
-        Apify.utils.log.error(`You need access to ${REQUIRED_PROXY_GROUP} to be able to use this actor.
-       Please contact support at support@apify.com to get access.`);
+        Apify.utils.log.error(`You need access to ${REQUIRED_PROXY_GROUP} Apify Proxy group in order to use this actor. Please contact support@apify.com to get the access.`);
         process.exit(1);
     }
     // Check that SERP limit was not reached.
     if (userInfo.limits.isGoogleSerpBanned) {
-        Apify.utils.log.error(`You have reached your ${REQUIRED_PROXY_GROUP} proxy group limit for number of queries.
-       Please contact support at support@apify.com to increase the limit.`);
+        Apify.utils.log.error(`You have reached your limit for the number of Google SERP queries on Apify Proxy. Please contact support@apify.com to increase the limit.`);
         process.exit(1);
     }
 };

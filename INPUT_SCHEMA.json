@@ -12,9 +12,9 @@
             "editor": "textarea"
         },
         "countryCode": {
-            "title": "Country code",
+            "title": "Country",
             "type": "string",
-            "description": "Country for the search results. It's passed to Google Search as the <code>gl</code> URL query parameter. The values must be lower-cased <a href=\"https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2\" target=\"_blank\">ISO 3166</a> country codes supported by Google.<br><br>This setting only applies to <strong>Search queries</strong>, but not to <strong>Search URLs</strong>.",
+            "description": "Country for the search results, which determines the IP address of the proxy used for the query and the Google Search domain (e.g. <code>google.es</code> for Spain). The values must be lower-cased <a href=\"https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2\" target=\"_blank\">ISO 3166</a> country codes supported by Google. By default, the actor uses United States (<code>google.com</code>).<br><br>This setting only applies to <strong>Search queries</strong>, but not to <strong>Search URLs</strong>.",
             "default": "us",
             "editor": "select",
             "enum": [
@@ -260,7 +260,7 @@
                 "zw"
             ],
             "enumTitles": [
-                "None",
+                "United States",
                 "Afghanistan",
                 "Albania",
                 "Algeria",
@@ -503,9 +503,9 @@
             ]
         },
         "languageCode": {
-            "title": "Language code",
+            "title": "Language",
             "type": "string",
-            "description": "Language for the search results. It's passed to Google Search as the <code>hl</code> URL query parameter. The values must be lower-cased <a href=\"https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes\" target=\"_blank\">ISO 639</a> language codes supported by Google.<br><br>This setting only applies to <strong>Search queries</strong>, but not to <strong>Search URLs</strong>.",
+            "description": "Language for the search results, which is passed to Google Search as the <code>hl</code> URL query parameter. Only set this if you want to use a non-default language for the selected country. The values must be lower-cased <a href=\"https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes\" target=\"_blank\">ISO 639</a> language codes supported by Google.<br><br>This setting only applies to <strong>Search queries</strong>, but not to <strong>Search URLs</strong>.",
             "default": "en",
             "editor": "select",
             "enum": [
@@ -595,7 +595,7 @@
                 "zu"
             ],
             "enumTitles": [
-                "None",
+                "Default",
                 "Afrikaans",
                 "Albanian",
                 "Amharic",
@@ -684,7 +684,7 @@
         "locationUule": {
             "title": "UULE location code",
             "type": "string",
-            "description": "The code for geolocation of search results. It's passed to Google Search as the <code>uule</code> URL query parameter.<br><br><a href='https://padavvan.github.io/'>UULE code generator</a><br>For more information, see <a href='https://moz.com/ugc/geolocation-the-ultimate-tip-to-emulate-local-search' target='_blank'>this article</a>.<br><br>This setting only applies to <strong>Search queries</strong>, but not to <strong>Search URLs</strong>.",
+            "description": "The code for geolocation of search results. It's passed to Google Search as the <code>uule</code> URL query parameter. You can use the <a href='https://padavvan.github.io/' target='_blank'>UULE code generator</a> or <a href='https://moz.com/ugc/geolocation-the-ultimate-tip-to-emulate-local-search' target='_blank'>read more</a>.<br><br>This setting only applies to <strong>Search queries</strong>, but not to <strong>Search URLs</strong>.",
             "editor": "textfield"
         },
         "resultsPerPage": {

@@ -1,6 +1,8 @@
 const Apify = require('apify');
 const url = require('url');
-const { REQUIRED_PROXY_GROUP, GOOGLE_DEFAULT_RESULTS_PER_PAGE } = require('./consts');
+const {
+    REQUIRED_PROXY_GROUP, GOOGLE_DEFAULT_RESULTS_PER_PAGE, DEFAULT_GOOGLE_SEARCH_DOMAIN_COUNTRY_CODE,
+    GOOGLE_SEARCH_DOMAIN_TO_COUNTRY_CODE } = require('./consts');
 const extractorsDesktop = require('./extractors_desktop');
 const extractorsMobile = require('./extractors_mobile');
 const {
@@ -9,7 +11,8 @@ const {
 } = require('./tools');
 
 Apify.main(async () => {
-    const input = await Apify.getValue('INPUT');
+    const input = await Apify.getInput();
+
     const { maxConcurrency, maxPagesPerQuery, customDataFunction, mobileResults, saveHtml } = input;
 
     // Check that user have access to SERP proxy.
@@ -18,7 +21,7 @@ Apify.main(async () => {
 
     // Create initial request list and queue.
     const initialRequests = getInitialRequests(input);
-    if (!initialRequests.length) throw new Error('At least one search query or search URL must be provided in input!');
+    if (!initialRequests.length) throw new Error('The input must contain at least one search query or URL.');
     const requestList = await Apify.openRequestList('initial-requests', initialRequests);
     const requestQueue = await Apify.openRequestQueue();
     const extractors = mobileResults ? extractorsMobile : extractorsDesktop;
@@ -41,8 +44,12 @@ Apify.main(async () => {
         handlePageFunction: async ({ request, response, html, $ }) => {
             request.userData.finishedAt = new Date();
 
-            const nonzeroPage = request.userData.page + 1; // Let's display the same number as Google, i.e. 1, 2, 3..
+            const nonzeroPage = request.userData.page + 1; // Display same page numbers as Google, i.e. 1, 2, 3..
             const parsedUrl = url.parse(request.url, true);
+
+            // We know the URL matches (otherwise we have a bug here)
+            const matches = GOOGLE_SEARCH_URL_REGEX.match(request.url);
+            const domain = matches[3].toLowerCase();
 
             // Compose the dataset item.
             const data = {
@@ -53,7 +60,8 @@ Apify.main(async () => {
                     device: mobileResults ? 'MOBILE' : 'DESKTOP',
                     page: nonzeroPage,
                     type: 'SEARCH',
-                    countryCode: parsedUrl.query.gl || null,
+                    domain,
+                    countryCode: GOOGLE_SEARCH_DOMAIN_TO_COUNTRY_CODE[domain] || DEFAULT_GOOGLE_SEARCH_DOMAIN_COUNTRY_CODE,
                     languageCode: parsedUrl.query.hl || null,
                     locationUule: parsedUrl.query.uule || null,
                     resultsPerPage: parsedUrl.query.num || GOOGLE_DEFAULT_RESULTS_PER_PAGE,
