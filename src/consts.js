@@ -1,4 +1,4 @@
-const _ = require('undescore');
+const _ = require('underscore');
 
 exports.COUNTRY_CODE_TO_GOOGLE_SEARCH_DOMAIN = require('./google_domains.json');
 
