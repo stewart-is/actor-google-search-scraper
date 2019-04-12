@@ -1,5 +1,5 @@
 {
-	"name": "google-search-scraper-dev",
+	"name": "apify/google-search-scraper",
 	"version": "0.0",
 	"buildTag": "latest",
 	"env": null,

@@ -1,6 +1,8 @@
 const Apify = require('apify');
 const url = require('url');
-const { REQUIRED_PROXY_GROUP, GOOGLE_DEFAULT_RESULTS_PER_PAGE } = require('./consts');
+const {
+    REQUIRED_PROXY_GROUP, GOOGLE_DEFAULT_RESULTS_PER_PAGE, DEFAULT_GOOGLE_SEARCH_DOMAIN_COUNTRY_CODE,
+    GOOGLE_SEARCH_DOMAIN_TO_COUNTRY_CODE, GOOGLE_SEARCH_URL_REGEX } = require('./consts');
 const extractorsDesktop = require('./extractors_desktop');
 const extractorsMobile = require('./extractors_mobile');
 const {
@@ -8,8 +10,11 @@ const {
     logAsciiArt, createDebugInfo, ensureAccessToSerpProxy,
 } = require('./tools');
 
+const { log } = Apify.utils;
+
 Apify.main(async () => {
-    const input = await Apify.getValue('INPUT');
+    const input = await Apify.getInput();
+
     const { maxConcurrency, maxPagesPerQuery, customDataFunction, mobileResults, saveHtml } = input;
 
     // Check that user have access to SERP proxy.
@@ -18,9 +23,10 @@ Apify.main(async () => {
 
     // Create initial request list and queue.
     const initialRequests = getInitialRequests(input);
-    if (!initialRequests.length) throw new Error('At least one search query or search URL must be provided in input!');
+    if (!initialRequests.length) throw new Error('The input must contain at least one search query or URL.');
     const requestList = await Apify.openRequestList('initial-requests', initialRequests);
     const requestQueue = await Apify.openRequestQueue();
+    const dataset = await Apify.openDataset();
     const extractors = mobileResults ? extractorsMobile : extractorsDesktop;
 
     // Create crawler.
@@ -31,7 +37,7 @@ Apify.main(async () => {
         requestFunction: ({ request, autoscaledPool }) => {
             const parsedUrl = url.parse(request.url, true);
             request.userData.startedAt = new Date();
-            Apify.utils.log.info(`Querying "${parsedUrl.query.q}" page number ${request.userData.page} ...`);
+            log.info(`Querying "${parsedUrl.query.q}" page ${request.userData.page} ...`);
             return crawler._defaultRequestFunction({ request, autoscaledPool }); // eslint-disable-line
         },
         useApifyProxy: true,
@@ -41,8 +47,12 @@ Apify.main(async () => {
         handlePageFunction: async ({ request, response, html, $ }) => {
             request.userData.finishedAt = new Date();
 
-            const nonzeroPage = request.userData.page + 1; // Let's display the same number as Google, i.e. 1, 2, 3..
+            const nonzeroPage = request.userData.page + 1; // Display same page numbers as Google, i.e. 1, 2, 3..
             const parsedUrl = url.parse(request.url, true);
+
+            // We know the URL matches (otherwise we have a bug here)
+            const matches = GOOGLE_SEARCH_URL_REGEX.exec(request.url);
+            const domain = matches[3].toLowerCase();
 
             // Compose the dataset item.
             const data = {
@@ -53,7 +63,8 @@ Apify.main(async () => {
                     device: mobileResults ? 'MOBILE' : 'DESKTOP',
                     page: nonzeroPage,
                     type: 'SEARCH',
-                    countryCode: parsedUrl.query.gl || null,
+                    domain,
+                    countryCode: GOOGLE_SEARCH_DOMAIN_TO_COUNTRY_CODE[domain] || DEFAULT_GOOGLE_SEARCH_DOMAIN_COUNTRY_CODE,
                     languageCode: parsedUrl.query.hl || null,
                     locationUule: parsedUrl.query.uule || null,
                     resultsPerPage: parsedUrl.query.num || GOOGLE_DEFAULT_RESULTS_PER_PAGE,
@@ -79,14 +90,14 @@ Apify.main(async () => {
                 if (request.userData.page < maxPagesPerQuery - 1 && maxPagesPerQuery) {
                     await requestQueue.addRequest(createSerpRequest(`http://${parsedUrl.host}${nextPageUrl}`, request.userData.page + 1));
                 } else {
-                    Apify.utils.log.info(`Not enqueueing next page for query "${parsedUrl.query.q}" as "maxPagesPerQuery" have been reached.`);
+                    log.info(`Not enqueueing next page for query "${parsedUrl.query.q}" because the "maxPagesPerQuery" limit has been reached.`);
                 }
             }
 
-            await Apify.pushData(data);
+            await dataset.pushData(data);
 
             // Log some nice info for user.
-            Apify.utils.log.info(`Finished query "${parsedUrl.query.q}" page number ${nonzeroPage} (${getInfoStringFromResults(data)})`);
+            log.info(`Finished query "${parsedUrl.query.q}" page ${nonzeroPage} (${getInfoStringFromResults(data)})`);
         },
         handleFailedRequestFunction: async ({ request }) => {
             await Apify.pushData({
@@ -99,5 +110,16 @@ Apify.main(async () => {
     // Run the crawler.
     await crawler.run();
 
-    Apify.utils.log.info('Done - all queries have been finished.');
+    const { datasetId } = dataset;
+    if (datasetId) {
+        log.info(`Scraping is finished, see you next time.
+
+Full results in JSON format:
+https://api.apify.com/v2/datasets/${datasetId}/items?format=json
+
+Simplified organic results in JSON format:
+https://api.apify.com/v2/datasets/${datasetId}/items?format=json&fields=searchQuery,organicResults&unwind=organicResults`);
+    } else {
+        log.info('Scraping is finished, see you next time.');
+    }
 });
