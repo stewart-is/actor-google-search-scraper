@@ -34,11 +34,11 @@ Apify.main(async () => {
         requestList,
         requestQueue,
         maxConcurrency,
-        requestFunction: ({ request, autoscaledPool }) => {
+        prepareRequestFunction: ({ request }) => {
             const parsedUrl = url.parse(request.url, true);
             request.userData.startedAt = new Date();
             log.info(`Querying "${parsedUrl.query.q}" page ${request.userData.page} ...`);
-            return crawler._defaultRequestFunction({ request, autoscaledPool }); // eslint-disable-line
+            return request;
         },
         useApifyProxy: true,
         apifyProxyGroups: [REQUIRED_PROXY_GROUP],
