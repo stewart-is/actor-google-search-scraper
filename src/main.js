@@ -112,7 +112,7 @@ Apify.main(async () => {
 
     const { datasetId } = dataset;
     if (datasetId) {
-        log.info(`Google SERP scraping finished.
+        log.info(`Scraping is finished, see you next time.
 
 Full results in JSON format:
 https://api.apify.com/v2/datasets/${datasetId}/items?format=json
@@ -120,6 +120,6 @@ https://api.apify.com/v2/datasets/${datasetId}/items?format=json
 Simplified organic results in JSON format:
 https://api.apify.com/v2/datasets/${datasetId}/items?format=json&fields=searchQuery,organicResults&unwind=organicResults`);
     } else {
-        log.info('Google SERP scraping finished.');
+        log.info('Scraping is finished, see you next time.');
     }
 });
