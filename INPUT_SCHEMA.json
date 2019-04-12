@@ -1,6 +1,6 @@
 {
     "title": "Google Search Scraper input",
-    "description": "Define the Google Search query using the parameters below. You can enter either search queries and/or full Google Search URLs. You can scrape the data using specific language, country and location UUID. Note that these additional settings are applied only to search queries.",
+    "description": "Specify Google Search queries or full request URLs. Note that the additional settings such as <b>Country</b>, <b>Language</b>, or <b>UULE location code</b> only apply to the search queries, but not the URLs.",
     "type": "object",
     "schemaVersion": 1,
     "properties": {
@@ -15,7 +15,7 @@
         "countryCode": {
             "title": "Country",
             "type": "string",
-            "description": "Country for the search results, which determines the IP address of the proxy used for the query and the Google Search domain (e.g. <code>google.es</code> for Spain). The values must be lower-cased <a href=\"https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2\" target=\"_blank\">ISO 3166</a> country codes supported by Google. By default, the actor uses United States (<code>google.com</code>).<br><br>This setting only applies to <strong>Search queries</strong>, but not to <strong>Search URLs</strong>.",
+            "description": "Country determines the IP address of the proxy used for the query and the Google Search domain (e.g. <code>google.es</code> for Spain). The values must be lower-cased <a href=\"https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2\" target=\"_blank\">ISO 3166</a> country codes supported by Google. By default, the actor uses United States (<code>google.com</code>).<br><br>This setting only applies to <strong>Search queries</strong>, but not to <strong>Search URLs</strong>.",
             "default": "us",
             "editor": "select",
             "enum": [
@@ -699,7 +699,7 @@
         "maxPagesPerQuery": {
             "title": "Max pages per query",
             "type": "integer",
-            "description": "The maximum number of search result pages crawled for each search query or URL. Note that a value greater than <code>1</code> might significantly increase the duration of the crawl.",
+            "description": "The maximum number of search result pages crawled for each search query or URL. Note that a value greater than one might significantly slow down the actor.",
             "default": 1,
             "minimum": 1
         },
@@ -721,7 +721,7 @@
         "saveHtml": {
             "title": "Save HTML",
             "type": "boolean",
-            "description": "If checked, then the results will contain the raw HTML of Google Search results pages.",
+            "description": "If checked, the results will contain the raw HTML of Google Search results pages.",
             "default": false,
             "groupCaption": "Options",
             "groupDescription": "Various options for this actor"
