@@ -7,8 +7,8 @@
         "queries": {
             "title": "Search queries or URLs",
             "type": "string",
-            "description": "Google Search queries and/or Google Search URLs, one item per line.",
-            "prefill": "Hotels in Prague\nRestaurants in Prague\nhttps://www.google.com/search?safe=off&source=hp&ei=YQhwXN3ZIoGCk74PrIiM8A4&q=accommodation&btnK=Hledat+Googlem&oq=accommodation",
+            "description": "Google Search queries (e.g. <code>Restaurants in NYC</code>) and/or Google Search URLs (e.g. <code>https://www.google.com/search?q=restaurants+in+NYC</code>).<br><br>Enter one item per line.",
+            "prefill": "Hotels in NYC\nRestaurants in NYC\nhttps://www.google.com/search?q=restaurants+in+NYC",
             "editor": "textarea",
             "pattern": "[^\\s]+"
         },
