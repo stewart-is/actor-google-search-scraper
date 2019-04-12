@@ -7,6 +7,7 @@ const {
     DEFAULT_GOOGLE_SEARCH_DOMAIN_COUNTRY_CODE,
     COUNTRY_CODE_TO_GOOGLE_SEARCH_DOMAIN,
     GOOGLE_SEARCH_URL_REGEX,
+    GOOGLE_DEFAULT_RESULTS_PER_PAGE,
 } = require('./consts');
 
 exports.createSerpRequest = (url, page) => {
@@ -44,7 +45,8 @@ exports.getInitialRequests = ({
             // NOTE: Don't set the "gl" parameter, some Apify Proxy Google SERP providers cannot handle it!
             if (languageCode) qs.hl = languageCode;
             if (locationUule) qs.uule = locationUule;
-            if (resultsPerPage) qs.num = resultsPerPage;
+            // Only add this param if non-default, the less query params the better!
+            if (resultsPerPage && resultsPerPage !== GOOGLE_DEFAULT_RESULTS_PER_PAGE) qs.num = resultsPerPage;
             if (mobileResults) qs.xmobile = 1;
 
             return exports.createSerpRequest(`http://www.${domain}/search?${queryString.stringify(qs)}`, 0);

@@ -37,7 +37,7 @@ Apify.main(async () => {
         requestFunction: ({ request, autoscaledPool }) => {
             const parsedUrl = url.parse(request.url, true);
             request.userData.startedAt = new Date();
-            log.info(`Querying "${parsedUrl.query.q}" page number ${request.userData.page} ...`);
+            log.info(`Querying "${parsedUrl.query.q}" page ${request.userData.page} ...`);
             return crawler._defaultRequestFunction({ request, autoscaledPool }); // eslint-disable-line
         },
         useApifyProxy: true,
@@ -97,7 +97,7 @@ Apify.main(async () => {
             await dataset.pushData(data);
 
             // Log some nice info for user.
-            log.info(`Finished query "${parsedUrl.query.q}" page number ${nonzeroPage} (${getInfoStringFromResults(data)})`);
+            log.info(`Finished query "${parsedUrl.query.q}" page ${nonzeroPage} (${getInfoStringFromResults(data)})`);
         },
         handleFailedRequestFunction: async ({ request }) => {
             await Apify.pushData({
