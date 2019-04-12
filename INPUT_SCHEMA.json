@@ -15,7 +15,7 @@
         "countryCode": {
             "title": "Country",
             "type": "string",
-            "description": "Country determines the IP address of the proxy used for the query and the Google Search domain (e.g. <code>google.es</code> for Spain). The values must be lower-cased <a href=\"https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2\" target=\"_blank\">ISO 3166</a> country codes supported by Google. By default, the actor uses United States (<code>google.com</code>).<br><br>This setting only applies to <strong>Search queries</strong>, but not to <strong>Search URLs</strong>.",
+            "description": "Country determines the IP address of the proxy used for the query and the Google Search domain (e.g. <code>google.es</code> for Spain). The values must be lower-cased <a href=\"https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2\" target=\"_blank\">ISO 3166</a> country codes supported by Google. By default, the actor uses United States (<code>google.com</code>).<br><br>This setting only applies to <strong>Search queries</strong>, but not to <strong>URLs</strong>.",
             "default": "us",
             "editor": "select",
             "enum": [
@@ -506,7 +506,7 @@
         "languageCode": {
             "title": "Language",
             "type": "string",
-            "description": "Language for the search results, which is passed to Google Search as the <code>hl</code> URL query parameter. Only set this if you want to use a non-default language for the selected country. The values must be lower-cased <a href=\"https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes\" target=\"_blank\">ISO 639</a> language codes supported by Google.<br><br>This setting only applies to <strong>Search queries</strong>, but not to <strong>Search URLs</strong>.",
+            "description": "Language for the search results, which is passed to Google Search as the <code>hl</code> URL query parameter. Only set this if you want to use a non-default language for the selected country. The values must be lower-cased <a href=\"https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes\" target=\"_blank\">ISO 639</a> language codes supported by Google.<br><br>This setting only applies to <strong>Search queries</strong>, but not to <strong>URLs</strong>.",
             "default": "en",
             "editor": "select",
             "enum": [
@@ -685,13 +685,13 @@
         "locationUule": {
             "title": "UULE location code",
             "type": "string",
-            "description": "The code for geolocation of search results. It's passed to Google Search as the <code>uule</code> URL query parameter. You can use the <a href='https://padavvan.github.io/' target='_blank'>UULE code generator</a> or <a href='https://moz.com/ugc/geolocation-the-ultimate-tip-to-emulate-local-search' target='_blank'>read more</a>.<br><br>This setting only applies to <strong>Search queries</strong>, but not to <strong>Search URLs</strong>.",
+            "description": "The code for geolocation of search results. It's passed to Google Search as the <code>uule</code> URL query parameter. You can use the <a href='https://padavvan.github.io/' target='_blank'>UULE code generator</a> or <a href='https://moz.com/ugc/geolocation-the-ultimate-tip-to-emulate-local-search' target='_blank'>read more</a>.<br><br>This setting only applies to <strong>Search queries</strong>, but not to <strong>URLs</strong>.",
             "editor": "textfield"
         },
         "resultsPerPage": {
             "title": "Results per page",
             "type": "integer",
-            "description": "Number of search results per page. By default, Google Search shows 10 pages. The allowed values are: <code>10</code>, <code>20</code>, <code>30</code>, <code>40</code>, <code>50</code> and <code>100</code>.<br><br>This setting only applies to <strong>Search queries</strong>, but not to <strong>Search URLs</strong>.",
+            "description": "Number of search results per page. By default, Google Search shows 10 pages. The allowed values are: <code>10</code>, <code>20</code>, <code>30</code>, <code>40</code>, <code>50</code> and <code>100</code>.<br><br>This setting only applies to <strong>Search queries</strong>, but not to <strong>URLs</strong>.",
             "default": 10,
             "maximum": 100,
             "minimum": 1
