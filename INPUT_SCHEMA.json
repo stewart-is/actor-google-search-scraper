@@ -1,13 +1,13 @@
 {
     "title": "Google Search Scraper input",
-    "description": "Specify Google Search queries or full request URLs. Note that the additional settings such as Country, Language, or UULE location code only apply to the search queries, but not the URLs.",
+    "description": "Specify Google Search queries or full URLs. Note that the additional settings such as Country, Language, or UULE location code only apply to the search queries, but not the URLs.",
     "type": "object",
     "schemaVersion": 1,
     "properties": {
         "queries": {
             "title": "Search queries or URLs",
             "type": "string",
-            "description": "Google Search queries (e.g. <code>Restaurants in NYC</code>) and/or Google Search URLs (e.g. <code>https://www.google.com/search?q=restaurants+in+NYC</code>).<br><br>Enter one item per line.",
+            "description": "Google Search queries (e.g. <code>food in NYC</code>) and/or full URLs (e.g. <code>https://www.google.com/search?q=food+NYC</code>).<br><br>Enter one item per line.",
             "prefill": "Hotels in NYC\nRestaurants in NYC\nhttps://www.google.com/search?q=restaurants+in+NYC",
             "editor": "textarea",
             "pattern": "[^\\s]+"

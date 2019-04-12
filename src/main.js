@@ -90,7 +90,7 @@ Apify.main(async () => {
                 if (request.userData.page < maxPagesPerQuery - 1 && maxPagesPerQuery) {
                     await requestQueue.addRequest(createSerpRequest(`http://${parsedUrl.host}${nextPageUrl}`, request.userData.page + 1));
                 } else {
-                    log.info(`Not enqueueing next page for query "${parsedUrl.query.q}" as "maxPagesPerQuery" have been reached.`);
+                    log.info(`Not enqueueing next page for query "${parsedUrl.query.q}" because the "maxPagesPerQuery" limit has been reached.`);
                 }
             }
 
@@ -111,7 +111,7 @@ Apify.main(async () => {
     await crawler.run();
 
     const { datasetId } = dataset;
-    if (!datasetId) {
+    if (datasetId) {
         log.info(`Google SERP scraping finished.
 
 Full results in JSON format:
