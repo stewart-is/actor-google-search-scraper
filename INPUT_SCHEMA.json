@@ -1,6 +1,6 @@
 {
     "title": "Google Search Scraper input",
-    "description": "Specify Google Search queries or full request URLs. Note that the additional settings such as <b>Country</b>, <b>Language</b>, or <b>UULE location code</b> only apply to the search queries, but not the URLs.",
+    "description": "Specify Google Search queries or full request URLs. Note that the additional settings such as Country, Language, or UULE location code only apply to the search queries, but not the URLs.",
     "type": "object",
     "schemaVersion": 1,
     "properties": {
