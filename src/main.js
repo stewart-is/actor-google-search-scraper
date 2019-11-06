@@ -92,6 +92,8 @@ Apify.main(async () => {
                 } else {
                     log.info(`Not enqueueing next page for query "${parsedUrl.query.q}" because the "maxPagesPerQuery" limit has been reached.`);
                 }
+            } else {
+                log.info(`This is the last page for query "${parsedUrl.query.q}". Next page button has not been found.`);
             }
 
             await dataset.pushData(data);
