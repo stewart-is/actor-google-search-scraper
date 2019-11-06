@@ -1,6 +1,6 @@
 const { ensureItsAbsoluteUrl } = require('./tools');
 
-exports.extractOgranicResults = ($) => {
+exports.extractOrganicResults = ($) => {
     const searchResults = [];
 
     $('#ires, .srg > div').each((index, el) => {
