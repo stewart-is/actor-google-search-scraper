@@ -133,7 +133,7 @@ exports.ensureAccessToSerpProxy = async () => {
 };
 
 exports.ensureItsAbsoluteUrl = (maybeUrl, hostname) => {
-    return maybeUrl.startsWith('/')
+    return maybeUrl && maybeUrl.startsWith('/')
         ? `https://${hostname}${maybeUrl}`
         : maybeUrl;
 };
