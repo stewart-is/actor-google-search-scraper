@@ -75,7 +75,7 @@ Apify.main(async () => {
                 relatedQueries: extractors.extractRelatedQueries($, parsedUrl.host),
                 paidResults: extractors.extractPaidResults($),
                 paidProducts: extractors.extractPaidProducts($),
-                organicResults: extractors.extractOgranicResults($),
+                organicResults: extractors.extractOrganicResults($),
                 customData: customDataFunction
                     ? await executeCustomDataFunction(customDataFunction, { input, $, request, response, html })
                     : null,
