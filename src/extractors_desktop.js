@@ -1,9 +1,13 @@
 const { ensureItsAbsoluteUrl } = require('./tools');
 
-exports.extractOgranicResults = ($) => {
+exports.extractOrganicResults = ($) => {
     const searchResults = [];
 
     $('.g .rc').each((index, el) => {
+        // HOTFIX: Google is A/B testing a new dropdown, which causes invalid results.
+        // For now, just remove it.
+        $(el).find('div.action-menu').remove();
+
         const siteLinks = [];
         $(el).find('ul li').each((i, siteLinkEl) => {
             siteLinks.push({
