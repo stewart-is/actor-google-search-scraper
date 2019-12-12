@@ -4,30 +4,19 @@
 	"description": "This is a boilerplate of an Apify actor.",
 	"main": "main.js",
 	"dependencies": {
-		"apify": "^0.16.1",
-		"cheerio": "^1.0.0-rc.3",
+		"apify": "^0.17.0",
 		"query-string": "^6.8.3",
 		"underscore": "^1.9.1"
 	},
 	"devDependencies": {
-		"chai": "^4.1.2",
-		"eslint": "^5.5.0",
-		"eslint-config-airbnb": "^17.1.1",
-		"eslint-config-airbnb-base": "^13.2.0",
-		"eslint-plugin-import": "^2.18.2",
-		"eslint-plugin-jsx-a11y": "^6.2.3",
-		"eslint-plugin-promise": "^4.2.1",
-		"eslint-plugin-react": "^7.16.0",
-		"markdown-toc": "^1.2.0",
-		"mocha": "^5.2.0",
-		"nyc": "^12.0.2",
-		"sinon": "^6.0.0"
+		"@apify/eslint-config": "^0.0.3",
+		"eslint": "^6.5.1"
 	},
 	"scripts": {
 		"build-toc": "./node_modules/.bin/markdown-toc README.md -i",
 		"test": "nyc --reporter=html --reporter=text mocha --timeout 60000 --recursive",
 		"start": "node main",
-		"lint": "./node_modules/.bin/eslint ./src ./test"
+		"lint": "./node_modules/.bin/eslint ./src"
 	},
 	"repository": {
 		"type": "git",
