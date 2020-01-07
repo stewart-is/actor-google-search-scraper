@@ -12,7 +12,7 @@ Specifically, the actor extracts the following data from each Google Search resu
 
 Note that the actor doesn't support special types of Google searches,
 such as [Google Shopping](https://www.google.com/shopping),
-[Google Images](https://www.google.com/imghp) or [Google News](news.google.com).
+[Google Images](https://www.google.com/imghp) or [Google News](https://news.google.com).
 
 ## Use cases
 
