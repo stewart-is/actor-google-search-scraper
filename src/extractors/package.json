@@ -1,0 +1,16 @@
+{
+	"name": "@apify/google-extractors",
+	"version": "1.0.0",
+	"description": "Extractors for paid and organic results from Google Search.",
+	"main": "main.js",
+	"dependencies": {
+		"cheerio": "^1.0.0-rc.3"
+	},
+	"repository": {
+		"type": "git",
+		"url": ""
+	},
+	"author": "",
+	"license": "ISC",
+	"homepage": ""
+}

@@ -3,8 +3,8 @@ const url = require('url');
 const {
     REQUIRED_PROXY_GROUP, GOOGLE_DEFAULT_RESULTS_PER_PAGE, DEFAULT_GOOGLE_SEARCH_DOMAIN_COUNTRY_CODE,
     GOOGLE_SEARCH_DOMAIN_TO_COUNTRY_CODE, GOOGLE_SEARCH_URL_REGEX } = require('./consts');
-const extractorsDesktop = require('./extractors_desktop');
-const extractorsMobile = require('./extractors_mobile');
+const extractorsDesktop = require('./extractors/desktop');
+const extractorsMobile = require('./extractors/mobile');
 const {
     getInitialRequests, executeCustomDataFunction, getInfoStringFromResults, createSerpRequest,
     logAsciiArt, createDebugInfo, ensureAccessToSerpProxy,

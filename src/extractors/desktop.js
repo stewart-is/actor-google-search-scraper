@@ -1,4 +1,4 @@
-const { ensureItsAbsoluteUrl } = require('./tools');
+const { ensureItsAbsoluteUrl } = require('./ensure_absolute_url');
 
 exports.extractOrganicResults = ($) => {
     const searchResults = [];
