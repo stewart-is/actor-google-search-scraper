@@ -38,7 +38,7 @@ exports.getInitialRequests = ({
             if (GOOGLE_SEARCH_URL_REGEX.test(queryOrUrl)) return exports.createSerpRequest(queryOrUrl, 0);
 
             // Otherwise consider it as query term ...
-            const domain = COUNTRY_CODE_TO_GOOGLE_SEARCH_DOMAIN[countryCode]
+            const domain = COUNTRY_CODE_TO_GOOGLE_SEARCH_DOMAIN[(countryCode || '').toUpperCase()]
                 || COUNTRY_CODE_TO_GOOGLE_SEARCH_DOMAIN[DEFAULT_GOOGLE_SEARCH_DOMAIN_COUNTRY_CODE];
             const qs = { q: queryOrUrl };
 
