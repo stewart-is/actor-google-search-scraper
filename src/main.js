@@ -44,7 +44,7 @@ Apify.main(async () => {
         apifyProxyGroups: [REQUIRED_PROXY_GROUP],
         handlePageTimeoutSecs: 60,
         requestTimeoutSecs: 180,
-        handlePageFunction: async ({ request, response, html, $ }) => {
+        handlePageFunction: async ({ request, response, body, $ }) => {
             request.userData.finishedAt = new Date();
 
             const nonzeroPage = request.userData.page + 1; // Display same page numbers as Google, i.e. 1, 2, 3..
@@ -81,7 +81,7 @@ Apify.main(async () => {
                     : null,
             };
 
-            if (saveHtml) data.html = html;
+            if (saveHtml) data.html = body;
 
             // Enqueue new page.
             const nextPageUrl = $('#pnnext').attr('href');
