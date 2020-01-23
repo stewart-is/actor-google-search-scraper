@@ -7,7 +7,7 @@ const extractorsDesktop = require('./extractors/desktop');
 const extractorsMobile = require('./extractors/mobile');
 const {
     getInitialRequests, executeCustomDataFunction, getInfoStringFromResults, createSerpRequest,
-    logAsciiArt, createDebugInfo, ensureAccessToSerpProxy,
+    logAsciiArt, createDebugInfo,
 } = require('./tools');
 
 const { log } = Apify.utils;
@@ -15,11 +15,11 @@ const { log } = Apify.utils;
 Apify.main(async () => {
     const input = await Apify.getInput();
 
-    const { maxConcurrency, maxPagesPerQuery, customDataFunction, mobileResults, saveHtml } = input;
+    const { maxConcurrency, maxPagesPerQuery, customDataFunction, mobileResults, saveHtml, proxyList } = input;
 
     // Check that user have access to SERP proxy.
-    await ensureAccessToSerpProxy();
-    logAsciiArt();
+   // await ensureAccessToSerpProxy();
+    //logAsciiArt();
 
     // Create initial request list and queue.
     const initialRequests = getInitialRequests(input);
@@ -40,8 +40,9 @@ Apify.main(async () => {
             log.info(`Querying "${parsedUrl.query.q}" page ${request.userData.page} ...`);
             return request;
         },
-        useApifyProxy: true,
-        apifyProxyGroups: [REQUIRED_PROXY_GROUP],
+        useApifyProxy: false,
+   //   apifyProxyGroups: [REQUIRED_PROXY_GROUP],
+        proxyUrls: 
         handlePageTimeoutSecs: 60,
         requestTimeoutSecs: 180,
         handlePageFunction: async ({ request, response, body, $ }) => {
