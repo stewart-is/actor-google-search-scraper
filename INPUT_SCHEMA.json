@@ -730,7 +730,11 @@
             "type": "boolean",
             "description": "If checked, the crawler will return results for the mobile version of the Google Search. By default, desktop results are returned.",
             "default": false
-        }
+        },
+        "proxyUrls": {
+            "title": "Proxy URLs",
+            "type": "string",
+            "default": false,
     },
     "required": []
 }
