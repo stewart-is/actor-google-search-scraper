@@ -42,7 +42,7 @@ Apify.main(async () => {
         },
         useApifyProxy: false,
    //   apifyProxyGroups: [REQUIRED_PROXY_GROUP],
-        proxyUrls: 
+        proxyUrls: proxyList,
         handlePageTimeoutSecs: 60,
         requestTimeoutSecs: 180,
         handlePageFunction: async ({ request, response, body, $ }) => {
